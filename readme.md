@@ -12,8 +12,8 @@
 
 * **Two‑stage augmentation**
 
-  * **Offline augmentation**: fast transformations trained once per dataset (e.g., **Gaussian sampling around denoised centroids**, **Autoencoder** latent perturbations) to produce (x_{oa}).
-  * **Online augmentation**: **CVAE**/**GAN**/**flow** models that sample conditionally during training/inference to produce (x_{aug}).
+  * **Offline augmentation**: fast transformations trained once per dataset (e.g., **Gaussian sampling around denoised centroids**, **Autoencoder** latent perturbations) to produce $x_{oa}$.
+  * **Online augmentation**: **CVAE**/**GAN**/**flow** models that sample conditionally during training/inference to produce $x_{aug}$.
 * **Normalization choices**: compare **None**, **DESeq** size‑factor scaling, and **TC** (total count) normalization, plus optional log transforms.
 * **Model grid**: swap models & hyper‑parameters (e.g., latent dims 5/10/20; KL/β for CVAE; GAN generator depth) and evaluate cross‑cancer transfer.
 * **Evaluation**: multiple metrics that probe structure preservation and DE signal concordance (details in §4).
@@ -26,9 +26,9 @@
 
 **Reading the diagram**
 
-1. **Input/pilot data** (optionally expanded with TCGA cohorts) → **Offline augmentation** generates (x_{oa}).
-2. **Online augmentation** (deep generative models) samples (x_{aug}) conditioned on class/covariates.
-3. **Augmented dataset** = (x \cup x_{oa} \cup x_{aug}).
+1. **Input/pilot data** (optionally expanded with TCGA cohorts) → **Offline augmentation** generates $x_{oa}$.
+2. **Online augmentation** (deep generative models) samples $x_{aug}$ conditioned on class/covariates.
+3. **Augmented dataset** = $x \\cup x_{oa} \\cup x_{aug}$.
 4. **Validation suite** applies metrics including clustering alignment and DE concordance to decide which settings generalize best.
 
 > In this demo, I provide notebooks that recreate the pipeline with toy matrices so the figures can be regenerated end‑to‑end.
@@ -52,12 +52,18 @@
 
 We report four metrics from top to bottom:
 
-1. **ARI** — Adjusted Rand Index for clustering assignments of (original + augmented) samples vs. known subtypes. Higher is better (1 = perfect; 0 ≈ random).
+1. **ARI** — Adjusted Rand Index for clustering assignments of (original + augmented) samples vs. known subtypes. Lower is better (1 = greatly separated; 0 ≈ perfect grouped).
 2. **ccc_pos** — **Concordance Correlation Coefficient** between original and augmented **marker‑positivity** summaries (binary/thresholded calls per gene/miRNA).
-3. **ccc_log2FC** — CCC between original and augmented **log2 fold‑changes** from DE analysis (per feature, between subtypes).
+3. **ccc_log2FC** — CCC between original and augmented **log2 fold‑changes** from DE analysis.
 4. **ccc_log10pvalue** — CCC between original and augmented **−log10 p‑values** from DE tests.
 
-> **CCC formula** (Lin): (\rho_c = \frac{2\rho,\sigma_x\sigma_y}{\sigma_x^2 + \sigma_y^2 + (\mu_x - \mu_y)^2}). Values approach 1 for perfect concordance. We compute CCC across features within each model/normalization setting.
+> **CCC formula** (Lin):
+
+$$
+\\rho_c = \\frac{2\\rho\\,\\sigma_x\\sigma_y}{\\sigma_x^2 + \\sigma_y^2 + (\\mu_x - \\mu_y)^2}
+$$
+
+Values approach 1 for perfect concordance. We compute CCC across features within each model/normalization setting.
 
 ---
 
