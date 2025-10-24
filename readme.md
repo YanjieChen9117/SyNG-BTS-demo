@@ -31,8 +31,6 @@
 3. **Augmented dataset** = $x \\cup x_{oa} \\cup x_{aug}$.
 4. **Validation suite** applies metrics including clustering alignment and DE concordance to decide which settings generalize best.
 
-> In this demo, I provide notebooks that recreate the pipeline with toy matrices so the figures can be regenerated end‑to‑end.
-
 ---
 
 ## 3) Example Augmented Embeddings — TGCT (Figure 2)
